@@ -1,8 +1,11 @@
 "use client"
-import { authClient } from "@/lib/auth-client"; //import the auth client
+
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 import { useState } from 'react';
  
 export default function Login() {
+  const router = useRouter()
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
  
@@ -15,7 +18,7 @@ export default function Login() {
          //show loading
         }, 
         onSuccess: (ctx) => { 
-          //redirect to the dashboard
+          router.push('/dashboard')
         }, 
         onError: (ctx) => { 
           alert(ctx.error.message); 
