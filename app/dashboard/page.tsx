@@ -1,5 +1,6 @@
+
 export default function Dashboard() {
   return (
-    <div>salam</div>
+    <h1>Dashboard</h1>
   )
 }

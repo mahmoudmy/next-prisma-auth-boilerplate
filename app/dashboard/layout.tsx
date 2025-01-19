@@ -1,9 +1,9 @@
 "use client"
 
 import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
-export function DashboardLayout({
+export default function DashboardLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -25,7 +25,7 @@ export function DashboardLayout({
 
 	if (!session) {
 		router.push('/login')
-	}
+	} 
 
 	return (
 		<div>{children}</div>
