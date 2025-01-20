@@ -1,18 +1,26 @@
 "use client"
 
+import { AppSidebar } from "@/components/app-sidebar"
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 import type { ReactNode } from "react"
-import { useState } from "react"
-import { Sidebar } from "./components/sidebar"
-import { Navbar } from "./components/navbar"
-import { cn } from "@/lib/utils"
 import LoadingScreen from "./components/loading"
-import { User } from "better-auth"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const router = useRouter()
 
 	const {
@@ -34,40 +42,33 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 	}
 
 	return (
-		<div className="relative flex min-h-screen" dir="rtl">
-			{/* Sidebar for mobile */}
-			<div
-				className={cn(
-					"fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden",
-					isSidebarOpen ? "block" : "hidden"
-				)}
-				onClick={() => setIsSidebarOpen(false)}
-			/>
-			<div
-				className={cn(
-					"fixed top-0 bottom-0 right-0 z-50 w-72 bg-background md:hidden",
-					isSidebarOpen ? "translate-x-0" : "translate-x-full"
-				)}
-			>
-				<Sidebar isCollapsed={false} />
-			</div>
-
-			{/* Sidebar for desktop */}
-			<div
-				className={cn(
-					"hidden md:block",
-					isSidebarCollapsed ? "w-[80px]" : "w-72"
-				)}
-			>
-				<Sidebar isCollapsed={isSidebarCollapsed} />
-			</div>
-
-			{/* Main content */}
-			<div className="flex-1">
-				<Navbar user={session?.user as User} onMenuClick={() => setIsSidebarOpen(true)} />
-				<main className="p-6">{children}</main>
-			</div>
-		</div>
+		<SidebarProvider>
+			<AppSidebar side="right" />
+			<SidebarInset>
+				<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+					<div className="flex items-center gap-2 px-4">
+						<SidebarTrigger className="-mr-1" />
+						<Separator orientation="vertical" className="ml-2 h-4" />
+						<Breadcrumb>
+							<BreadcrumbList>
+								<BreadcrumbItem className="hidden md:block">
+									<BreadcrumbLink href="#">
+										Building Your Application
+									</BreadcrumbLink>
+								</BreadcrumbItem>
+								<BreadcrumbSeparator className="hidden md:block" />
+								<BreadcrumbItem>
+									<BreadcrumbPage>Data Fetching</BreadcrumbPage>
+								</BreadcrumbItem>
+							</BreadcrumbList>
+						</Breadcrumb>
+					</div>
+				</header>
+				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+					{children}
+				</div>
+			</SidebarInset>
+		</SidebarProvider>
 	);
 }
 
