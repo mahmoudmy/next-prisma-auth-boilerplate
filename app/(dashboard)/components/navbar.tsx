@@ -14,24 +14,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 interface NavbarProps {
   onMenuClick: () => void;
   user: {
     id: string;
     name: string;
-    username: string;
+    username?: string;
   }
 }
 
 export function Navbar({ user, onMenuClick }: NavbarProps) {
+  const router = useRouter()
+
+  const signOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      },
+    });
+  }
+
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
           <Menu className="h-5 w-5" />
         </Button>
-        
+
         <div className="flex items-center gap-2 mr-4 md:mr-8">
           <h1 className="text-xl font-bold">پنل مدیریت</h1>
         </div>
@@ -55,15 +69,14 @@ export function Navbar({ user, onMenuClick }: NavbarProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
-                {user.name}
+                {user ? user.name : '...'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuLabel>حساب کاربری</DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuItem>پروفایل</DropdownMenuItem>
-              <DropdownMenuItem>تنظیمات</DropdownMenuItem>
-              <DropdownMenuItem>خروج</DropdownMenuItem>
+              {/* <DropdownMenuItem>تنظیمات</DropdownMenuItem> */}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer" onClick={signOut}>خروج</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

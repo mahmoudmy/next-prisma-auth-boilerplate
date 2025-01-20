@@ -11,6 +11,7 @@ import { Ban, Edit, Search, UserPlus, UserCheck } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import updateUser from "./update";
 import TablePending from "../components/TablePending";
+import { Label } from "@/components/ui/label";
 
 interface User {
   id: string;
@@ -190,27 +191,27 @@ export default function UsersPage() {
               افزودن کاربر
             </Button>
           </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{selectedUser ? "ویرایش اطلاعات کاربر" : "ایجاد کاربر جدید"}</DialogTitle>
+          <DialogContent dir="rtl">
+            <DialogHeader dir="rtl">
+              <DialogTitle dir="rtl">{selectedUser ? "ویرایش اطلاعات کاربر" : "ایجاد کاربر جدید"}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium">نام</label>
+                <Label>نام</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">نام کاربری</label>
+                <Label>نام کاربری</Label>
                 <Input
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">نقش</label>
+                <Label>نقش</Label>
                 <Select
                   value={formData.role}
                   onValueChange={(value) => setFormData({ ...formData, role: value })}
@@ -219,8 +220,8 @@ export default function UsersPage() {
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="user">کاربر</SelectItem>
-                    <SelectItem value="admin">مدیر</SelectItem>
+                    <SelectItem value="user">User</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -237,7 +238,7 @@ export default function UsersPage() {
       </div>
 
       <div className="flex gap-4 mb-6">
-        <div className="relative flex-1">
+        <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
           <Input
             className="pl-10"

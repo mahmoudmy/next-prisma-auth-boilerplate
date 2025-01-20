@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import LoadingScreen from "@/app/(dashboard)/components/loading";
 
 export default function Login() {
   const router = useRouter()
@@ -16,6 +17,23 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('')
+
+  const {
+    data: session,
+    isPending, //loading state
+  } = authClient.useSession()
+
+  if (isPending) {
+    return (
+      <div>
+        <LoadingScreen />
+      </div>
+    )
+  }
+
+  if (session) {
+    return router.push('/dashboard')
+  }
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault()
