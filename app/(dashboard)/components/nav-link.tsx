@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 interface NavLinkProps {
   icon: LucideIcon;
@@ -19,10 +20,10 @@ export function NavLink({ icon: Icon, label, href, isCollapsed }: NavLinkProps) 
       )}
       asChild
     >
-      <a href={href} className="flex items-center gap-2">
+      <Link href={href} className="flex items-center gap-2">
         <Icon className={cn("h-5 w-5", isCollapsed && "mx-auto")} />
         {!isCollapsed && <span>{label}</span>}
-      </a>
+      </Link>
     </Button>
   );
 }

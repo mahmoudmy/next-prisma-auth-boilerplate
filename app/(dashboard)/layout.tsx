@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Sidebar } from "./components/sidebar"
 import { Navbar } from "./components/navbar"
 import { cn } from "@/lib/utils"
+import LoadingScreen from "./components/loading"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -21,7 +22,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
 	if (isPending) {
 		return (
-			<span>Loading ...</span>
+			<div>
+				<LoadingScreen />
+			</div>
 		)
 	}
 
@@ -60,7 +63,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
 			{/* Main content */}
 			<div className="flex-1">
-				<Navbar onMenuClick={() => setIsSidebarOpen(true)} />
+				<Navbar user={session?.user} onMenuClick={() => setIsSidebarOpen(true)} />
 				<main className="p-6">{children}</main>
 			</div>
 		</div>

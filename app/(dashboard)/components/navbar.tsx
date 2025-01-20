@@ -17,9 +17,14 @@ import {
 
 interface NavbarProps {
   onMenuClick: () => void;
+  user: {
+    id: string;
+    name: string;
+    username: string;
+  }
 }
 
-export function Navbar({ onMenuClick }: NavbarProps) {
+export function Navbar({ user, onMenuClick }: NavbarProps) {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
@@ -49,8 +54,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
+              <Button variant="ghost">
+                {user.name}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">

@@ -18,7 +18,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className, isCollapsed }: SidebarProps) {
   const menuItems = [
-    { icon: LayoutDashboard, label: "داشبورد", href: "/" },
+    { icon: LayoutDashboard, label: "داشبورد", href: "/dashboard" },
     { icon: Users, label: "کاربران", href: "/users" },
     { icon: BarChart3, label: "گزارش‌ها", href: "/reports" },
     { icon: FileText, label: "اسناد", href: "/documents" },

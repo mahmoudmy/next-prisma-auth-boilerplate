@@ -17,7 +17,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('')
 
-  const signUp = async (e: React.FormEvent) => {
+  const login = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
@@ -45,7 +45,7 @@ export default function Login() {
         <Image src="/placeholder.svg?height=1080&width=1920" alt="Login background" layout="fill" objectFit="cover" />
       </div>
       <div className="flex items-center justify-center p-8">
-        <form onSubmit={signUp}>
+        <form onSubmit={login}>
           <Card className="w-full max-w-md">
             <CardHeader>
               <CardTitle>ورود</CardTitle>
