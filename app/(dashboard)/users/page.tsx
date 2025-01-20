@@ -12,11 +12,13 @@ import { authClient } from "@/lib/auth-client";
 import updateUser from "./update";
 import TablePending from "../components/TablePending";
 import { Label } from "@/components/ui/label";
+import prisma from "@/lib/prisma";
+import getUsers from "./getUsers";
 
 interface User {
   id: string;
   name: string;
-  username?: string;
+  username?: string | null;
   role?: string | null;
   createdAt: Date;
   banned?: boolean | null;
@@ -57,22 +59,8 @@ export default function UsersPage() {
       setCurrentPage(1)
     }
     try {
-      const response = await authClient.admin.listUsers({
-        query: {
-          searchField: "name",
-          searchOperator: "contains",
-          searchValue: searchQuery,
-          limit: itemsPerPage,
-          offset: (page - 1) * itemsPerPage,
-          sortBy: "createdAt",
-          sortDirection: "desc",
-        },
-      });
-      if (response.data) {
-        setUsers(response.data.users);
-      } else {
-        throw new Error('Error in getting user data')
-      }
+      const {items, totalItems} = await getUsers(searchQuery, page)
+      setUsers(items)
     } catch (error) {
       toast({
         title: "Error",
