@@ -8,8 +8,8 @@ const vazir = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: "کالیبرو- مدیریت آسان کالیبراسیون",
-  description: "کالیبراسیون قطعات و تجهیزات را در سازمان را به آسانی با کالیبرو مدیریت کنید.",
+  title: "Next.js, Prisma, BetterAuth",
+  description: "Next.js, Prisma, BetterAuth",
 };
 
 export default function RootLayout({

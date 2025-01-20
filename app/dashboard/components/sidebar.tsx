@@ -1,94 +1,59 @@
-"use client"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { BarChart, Boxes, LayoutDashboard, Settings, Users } from "lucide-react"
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-
-const sidebarNavItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Products",
-    href: "/dashboard/products",
-    icon: Boxes,
-  },
-  {
-    title: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart,
-  },
-  {
-    title: "Customers",
-    href: "/dashboard/customers",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-]
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { 
+  LayoutDashboard, 
+  Users, 
+  Settings, 
+  HelpCircle,
+  BarChart3,
+  FileText,
+  Mail
+} from "lucide-react";
+import { NavLink } from "./nav-link";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  open: boolean
-  setOpen: (open: boolean) => void
+  isCollapsed: boolean;
 }
 
-export default function Sidebar({ className, open, setOpen }: SidebarProps) {
-  const pathname = usePathname()
+export function Sidebar({ className, isCollapsed }: SidebarProps) {
+  const menuItems = [
+    { icon: LayoutDashboard, label: "داشبورد", href: "/" },
+    { icon: Users, label: "کاربران", href: "/users" },
+    { icon: BarChart3, label: "گزارش‌ها", href: "/reports" },
+    { icon: FileText, label: "اسناد", href: "/documents" },
+    { icon: Mail, label: "پیام‌ها", href: "/messages" },
+    { icon: Settings, label: "تنظیمات", href: "/settings" },
+    { icon: HelpCircle, label: "راهنما", href: "/help" },
+  ];
 
   return (
-    <div
-      className={cn(
-        "fixed inset-y-0 left-0 z-50 w-96 bg-background transition-transform duration-300 ease-in-out transform lg:translate-x-0 lg:static lg:inset-auto lg:w-auto",
-        open ? "translate-x-0" : "-translate-x-full",
-        className,
-      )}
-    >
-      <div className="flex h-full flex-col overflow-y-auto">
-        <div className="px-3 py-4 lg:hidden">
-          <Button variant="outline" size="icon" onClick={() => setOpen(false)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span className="sr-only">Close Sidebar</span>
-          </Button>
-        </div>
-        <div className="space-y-4 py-4">
-          <div className="px-3 py-2">
-            <div className="space-y-1">
-              <nav className="grid items-start gap-2">
-                {sidebarNavItems.map((item, index) => (
-                  <Link key={index} href={item.href}>
-                    <span
-                      className={cn(
-                        "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                        pathname === item.href ? "bg-accent" : "transparent",
-                      )}
-                    >
-                      <item.icon className="ml-2 h-4 w-4" />
-                      <span>{item.title}</span>
-                    </span>
-                  </Link>
+    <div className={cn("pb-12 border-l", className)}>
+      <div className="space-y-4 py-4">
+        <div className="px-3 py-2">
+          <div className="space-y-1">
+            <h2 className={cn(
+              "mb-4 px-2 text-xl font-semibold tracking-tight",
+              isCollapsed && "text-center"
+            )}>
+              {!isCollapsed && "سیستم مدیریت"}
+            </h2>
+            <ScrollArea className="h-[calc(100vh-8rem)] px-1">
+              <div className="space-y-1">
+                {menuItems.map((item, index) => (
+                  <NavLink
+                    key={index}
+                    icon={item.icon}
+                    label={item.label}
+                    href={item.href}
+                    isCollapsed={isCollapsed}
+                  />
                 ))}
-              </nav>
-            </div>
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
