@@ -14,6 +14,7 @@ import TablePending from "../components/TablePending";
 import { Label } from "@/components/ui/label";
 import prisma from "@/lib/prisma";
 import getUsers from "./getUsers";
+import { PaginationWithLinks } from "../components/DynamicPagination";
 
 interface User {
   id: string;
@@ -321,6 +322,9 @@ export default function UsersPage() {
         >
           بعدی
         </Button>
+      </div>
+      <div className="mt-4">
+        <PaginationWithLinks pageSize={10} totalCount={34} page={currentPage} />
       </div>
     </div>
   );
