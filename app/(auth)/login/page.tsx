@@ -2,7 +2,7 @@
 
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -23,16 +23,18 @@ export default function Login() {
     isPending, //loading state
   } = authClient.useSession()
 
+  useEffect(() => {
+    if (!isPending && session) {
+      router.push('/dashboard')
+    }
+  }, [isPending, session, router])
+
   if (isPending) {
-    return (
-      <div>
-        <LoadingScreen />
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   if (session) {
-    return router.push('/dashboard')
+    return null 
   }
 
   const login = async (e: React.FormEvent) => {

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
-import type { ReactNode } from "react"
+import { useEffect, type ReactNode } from "react"
 import LoadingScreen from "./components/loading"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
@@ -29,17 +29,19 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 		error //error object
 	} = authClient.useSession()
 
-	if (isPending) {
-		return (
-			<div>
-				<LoadingScreen />
-			</div>
-		)
-	}
+	useEffect(() => {
+    if (!isPending && !session) {
+      router.push('/login')
+    }
+  }, [isPending, session, router])
 
-	if (!session) {
-		return router.push('/login')
-	}
+  if (isPending) {
+    return <LoadingScreen />
+  }
+
+  if (!session) {
+    return null // Return null instead of redirecting directly
+  }
 
 	return (
 		<SidebarProvider>
