@@ -50,7 +50,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         {/* <TeamSwitcher teams={data.teams} /> */}
-        <div className="text-center text-stone-800 font-bold text-lg bg-stone-200 rounded py-2">APPLICATION</div>
+        <div className="text-center text-stone-800 font-bold text-lg bg-stone-200 rounded-md py-2">APPLICATION</div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
