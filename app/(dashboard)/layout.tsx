@@ -43,7 +43,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
 	return (
 		<SidebarProvider>
-			<AppSidebar side="right" />
+			<AppSidebar
+				side="right"
+				user={{
+					...session.user,
+					image: session.user.image || undefined, // Convert null to undefined
+					email: session.user.email || undefined
+				}}
+			/>
 			<SidebarInset>
 				<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
 					<div className="flex items-center gap-2 px-4">
