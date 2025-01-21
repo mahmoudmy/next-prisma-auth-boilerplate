@@ -43,7 +43,7 @@ export interface PaginationWithLinksProps {
   />
  * ```
  */
-export function PaginationWithLinks({
+export function DynamicPagination({
   pageSizeSelectOptions,
   pageSize,
   totalCount,

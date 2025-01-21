@@ -12,9 +12,9 @@ import { authClient } from "@/lib/auth-client";
 import updateUser from "./update";
 import TablePending from "../components/TablePending";
 import { Label } from "@/components/ui/label";
-import prisma from "@/lib/prisma";
 import getUsers from "./getUsers";
-import { PaginationWithLinks } from "../components/DynamicPagination";
+import { DynamicPagination } from "../components/DynamicPagination";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -33,14 +33,18 @@ interface UserFormData {
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
   const itemsPerPage = 10;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  // Replace currentPage state with URL params
+  const page = parseInt(searchParams.get("page") || "1", 10) || 1;
 
   const initialFormData: UserFormData = {
     name: "",
@@ -51,17 +55,15 @@ export default function UsersPage() {
   const [formData, setFormData] = useState<UserFormData>(initialFormData);
 
   useEffect(() => {
-    loadUsers(currentPage)
-  }, [currentPage, searchQuery])
+    loadUsers();
+  }, [page, searchQuery]);
 
-  const loadUsers = async (page: number) => {
+  const loadUsers = async () => {
     setIsPending(true);
-    if (searchQuery.length > 0) {
-      setCurrentPage(1)
-    }
     try {
-      const {items, totalItems} = await getUsers(searchQuery, page)
-      setUsers(items)
+      const { items, totalItems } = await getUsers(searchQuery, page);
+      setUsers(items);
+      setTotalCount(totalItems);
     } catch (error) {
       toast({
         title: "Error",
@@ -71,6 +73,14 @@ export default function UsersPage() {
     } finally {
       setIsPending(false);
     }
+  };
+
+  const handleSearch = (query: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("search", query);
+    params.set("page", "1");
+    router.replace(`?${params.toString()}`);
+    setSearchQuery(query);
   };
 
   const handleCreateUser = async () => {
@@ -91,7 +101,7 @@ export default function UsersPage() {
       });
       setIsDialogOpen(false);
       setFormData(initialFormData);
-      loadUsers(currentPage);
+      loadUsers();
     } catch (error) {
       toast({
         title: "Error",
@@ -114,7 +124,7 @@ export default function UsersPage() {
       });
       setIsDialogOpen(false);
       setFormData(initialFormData);
-      loadUsers(currentPage);
+      loadUsers();
       setSelectedUser(null)
     } catch (error) {
       toast({
@@ -137,7 +147,7 @@ export default function UsersPage() {
         title: "Success",
         description: "کاربر مسدود شد!",
       });
-      loadUsers(currentPage);
+      loadUsers();
     } catch (error) {
       toast({
         title: "Error",
@@ -156,7 +166,7 @@ export default function UsersPage() {
         title: "Success",
         description: "کاربر مسدود شد!",
       });
-      loadUsers(currentPage);
+      loadUsers();
     } catch (error) {
       toast({
         title: "Error",
@@ -233,7 +243,7 @@ export default function UsersPage() {
             className="pl-10"
             placeholder="جستجوی نام ..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
       </div>
@@ -304,28 +314,15 @@ export default function UsersPage() {
         </Table>
       </div>
 
-      <div className="mt-4 flex justify-between items-center">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          قبلی
-        </Button>
-        <span className="text-sm text-gray-600">
-          صفحه {currentPage}
-        </span>
-        <Button
-          variant="outline"
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-          disabled={users.length < itemsPerPage}
-        >
-          بعدی
-        </Button>
+      <div className="mt-6">
+        <DynamicPagination
+          page={page}
+          pageSize={itemsPerPage}
+          totalCount={totalCount}
+          pageSearchParam="page"
+        />
       </div>
-      <div className="mt-4">
-        <PaginationWithLinks pageSize={10} totalCount={34} page={currentPage} />
-      </div>
+
     </div>
   );
 }
