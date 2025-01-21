@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -45,7 +46,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const router = useRouter();
-  
+
   const signOut = async () => {
     await authClient.signOut()
     router.push('/login')
@@ -91,9 +92,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/profile">
+                  <BadgeCheck />
+                  پروفایل
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

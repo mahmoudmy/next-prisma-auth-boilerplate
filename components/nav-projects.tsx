@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
 
 export function NavProjects({
   projects,
@@ -37,20 +38,20 @@ export function NavProjects({
   const { isMobile } = useSidebar()
 
   return (
-    <SidebarGroup dir="rtl" className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
-      <SidebarMenu dir="rtl">
+      <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem dir="rtl" key={item.name}>
-            <SidebarMenuButton dir="rtl" asChild>
-              <a href={item.url}>
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton asChild>
+              <Link href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
-            <DropdownMenu dir="rtl">
-              <DropdownMenuTrigger dir="rtl" asChild>
-                <SidebarMenuAction dir="rtl" showOnHover>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuAction showOnHover>
                   <MoreHorizontal />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
@@ -77,8 +78,8 @@ export function NavProjects({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem dir="rtl">
-          <SidebarMenuButton className="text-sidebar-foreground/70" dir="rtl">
+        <SidebarMenuItem>
+          <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontal className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
